@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Clients } from './clients.entity';
 
 @Entity()
@@ -21,7 +15,6 @@ export class Debts {
   @Column({ nullable: false })
   dueDate: Date;
 
-  @OneToOne(() => Clients, (client) => client.debt)
-  @JoinColumn()
+  @ManyToOne(() => Clients, (client) => client.debts)
   client: Clients;
 }

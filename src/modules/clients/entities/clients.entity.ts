@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToOne,
-  OneToMany,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Debts } from './debts.entity';
 import { Messages } from './messages.entity';
 
@@ -31,8 +25,8 @@ export class Clients {
   @Column({ nullable: false })
   undueDebt: number;
 
-  @OneToOne(() => Debts, (debt) => debt.client)
-  debt: Debts;
+  @OneToMany(() => Debts, (debt) => debt.client)
+  debts: Messages[];
 
   @OneToMany(() => Messages, (message) => message.client)
   messages: Messages[];
