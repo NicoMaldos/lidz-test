@@ -28,6 +28,7 @@ export class ClientsController {
 
   @Get('clients/:id/score')
   async getScore(@Param('id') id: number) {
-    return await this.clientsService.getScore(id);
+    const score = await this.clientsService.getScore(id);
+    return { score: score };
   }
 }
