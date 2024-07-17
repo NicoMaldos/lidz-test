@@ -25,9 +25,9 @@ export class Clients {
   @Column({ nullable: false })
   undueDebt: number;
 
-  @OneToMany(() => Debts, (debt) => debt.client)
-  debts: Messages[];
+  @OneToMany(() => Debts, (debt) => debt.client, { cascade: true })
+  debts: Debts[];
 
-  @OneToMany(() => Messages, (message) => message.client)
+  @OneToMany(() => Messages, (message) => message.client, { cascade: true })
   messages: Messages[];
 }
