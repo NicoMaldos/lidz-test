@@ -1,0 +1,25 @@
+service: lidz-test
+
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  architecture: arm64
+  stage: production
+  region: us-west-2
+  memorySize: 2048
+  logRetentionInDays: 1
+  timeout: 30
+
+functions:
+  api:
+    handler: dist/src/lambda.handler
+    events:
+      - httpApi:
+          method: any
+          path: /{proxy+}
+
+plugins:
+  - serverless-jetpack
+  - serverless-offline

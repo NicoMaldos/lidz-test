@@ -24,7 +24,11 @@ $ npm run start:prod
 ## Requisitos para ejecutar programa
 
 -Node instalado
--Creada la base de datos lidz en postgres y cambiar usuario y pass de postgres
+-Creada la base de datos y agregar las 4 variables de entorno en .env
+DATABASE_HOST=
+DATABASE_USER=
+DATABASE_PASSWORD=
+DATABASE_NAME=
 
 ## Comentario
 
