@@ -88,7 +88,7 @@ export class ClientsService {
   }
 
   async getScore(clientId: number): Promise<number> {
-    //3000 UF to CLP
+    //3000 UF in CLP
     const propertyValue = 112791000;
     const downPayment = propertyValue * 0.2;
 
@@ -114,7 +114,8 @@ export class ClientsService {
     score += undueDebtScore * 0.2;
 
     const salaryScore = this.salaryScoreCalculator(client, propertyValue);
-    if (salaryScore) {
+    //penlaty for low salary, doble percentaje of salary (salaryScore = 0 in this case)
+    if (salaryScore === 0) {
       score = (score / 0.7) * 0.4;
     }
     score += salaryScore * 0.3;
@@ -145,10 +146,11 @@ export class ClientsService {
 
   messagesScoreCalculator(client: ClientDto): number {
     let messagesScore;
-    if (client.messages.length > 10) {
+    //assuming is 1 message from client equals 1 message from bot
+    if (client.messages.length > 20) {
       messagesScore = 100;
     } else {
-      messagesScore = client.messages.length * 10;
+      messagesScore = client.messages.length * 5;
     }
     return messagesScore;
   }
@@ -160,7 +162,7 @@ export class ClientsService {
     );
     const savingDebts = client.savings - totalDebts;
     let savingDebtsScore;
-    if (savingDebts >= downPayment * 1.2) {
+    if (savingDebts > downPayment * 1.2) {
       savingDebtsScore = 100;
     } else if (savingDebts < downPayment * 0.3) {
       savingDebtsScore = 0;
@@ -176,6 +178,7 @@ export class ClientsService {
 
   undueDebtScoreCalculator(client: ClientDto) {
     let undueDebtScore;
+    //get installment for undueDebt fake credit for 30 year period
     const minimumInstallment = this.installmentCalculator(client.undueDebt, 30);
     if (minimumInstallment === 0) {
       return 100;
@@ -183,9 +186,9 @@ export class ClientsService {
       undueDebtScore = 0;
     } else {
       undueDebtScore = this.linearScoreCalculator(
-        minimumInstallment / 0.2,
+        client.salary * 0.2,
         0,
-        client.salary,
+        minimumInstallment,
       );
     }
     return undueDebtScore;
@@ -232,7 +235,7 @@ export class ClientsService {
     maximumX: number,
     actualValue: number,
   ): number {
-    //value names is because of linear equation standars
+    //value names is because of linear equation standards
     const m = 100 / (maximumX - minimumX);
     const b = -m * minimumX;
     const score = m * actualValue + b;
